@@ -14,6 +14,10 @@ The application allows users to select a prompting technique, enter a React task
 * Provide a simple and interactive Streamlit interface
 * Demonstrate prompt engineering concepts using a practical technical example
 
+## Live Demo
+
+https://prompt-engineering-jtszaappptnpwke8acktyvs.streamlit.app/
+
 ##  Features
 
 * Zero-shot prompting
@@ -124,12 +128,10 @@ Add your Streamlit screenshots here.
 
 Example:
 
-```text
-screenshots/
-├── home.png
-├── zero-shot.png
-├── one-shot.png
-└── few-shot.png
+<img width="1776" height="856" alt="Screenshot 2026-10-08 203544" src="https://github.com/user-attachments/assets/4bc77bea-06c7-4215-b89e-5ccda5ee8916" />
+<img width="1807" height="878" alt="Screenshot 2026-10-08 203618" src="https://github.com/user-attachments/assets/f5e2621a-1192-4bb8-a80c-95231773bf04" />
+<img width="1857" height="867" alt="Screenshot 2026-10-08 203653" src="https://github.com/user-attachments/assets/5dc9ec88-a468-4497-a68e-f61e8744916f" />
+
 ```
 
 ##  Author
