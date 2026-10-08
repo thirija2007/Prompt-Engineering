@@ -127,10 +127,18 @@ The application produces a React functional component using an array of student 
 Add your Streamlit screenshots here.
 
 Example:
-
+Zero-shot
 <img width="1776" height="856" alt="Screenshot 2026-10-08 203544" src="https://github.com/user-attachments/assets/4bc77bea-06c7-4215-b89e-5ccda5ee8916" />
+One-shot
 <img width="1807" height="878" alt="Screenshot 2026-10-08 203618" src="https://github.com/user-attachments/assets/f5e2621a-1192-4bb8-a80c-95231773bf04" />
+Few-shot
 <img width="1857" height="867" alt="Screenshot 2026-10-08 203653" src="https://github.com/user-attachments/assets/5dc9ec88-a468-4497-a68e-f61e8744916f" />
+CoT
+<img width="1693" height="772" alt="Screenshot 2026-10-08 203739" src="https://github.com/user-attachments/assets/1d36815b-3178-4e9a-a74f-d61c6d94b159" />
+Manual CoT
+<img width="1755" height="771" alt="Screenshot 2026-10-08 203810" src="https://github.com/user-attachments/assets/cd3114ed-7353-481a-bdc8-9321f542a1de" />
+ToT
+<img width="1817" height="882" alt="Screenshot 2026-10-08 203835" src="https://github.com/user-attachments/assets/77d776d1-cd0f-4da6-ad6e-fe13f7130590" />
 
 ```
 
