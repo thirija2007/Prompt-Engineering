@@ -1,37 +1,34 @@
 import os
 from dotenv import load_dotenv
-from huggingface_hub import InferenceClient
+from groq import Groq
 
 load_dotenv()
 
-MODEL_NAME = "Qwen/Qwen2.5-72B-Instruct"
-
-
 def ask_llm(prompt, temperature=0.3, max_tokens=600):
+    api_key = os.getenv("GROQ_API_KEY")
 
-    token = os.getenv("HF_TOKEN")
+    if not api_key:
+        raise RuntimeError(
+            "GROQ_API_KEY is missing from your .env file."
+        )
 
-    if not token:
-        raise RuntimeError("HF_TOKEN is not being loaded from .env")
-
-    client = InferenceClient(
-        api_key=token
-    )
+    client = Groq(api_key=api_key)
 
     response = client.chat.completions.create(
-        model=MODEL_NAME,
+        model="openai/gpt-oss-20b",
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful React programming assistant."
+                "content": (
+                    "You are a helpful general-purpose AI assistant. "
+                    "Answer questions on any topic. Follow the user's "
+                    "requested language, format, and programming language."
+                )
             },
-            {
-                "role": "user",
-                "content": prompt
-            }
+            {"role": "user", "content": prompt}
         ],
         temperature=temperature,
-        max_tokens=max_tokens
+        max_completion_tokens=max_tokens
     )
 
     return response.choices[0].message.content
