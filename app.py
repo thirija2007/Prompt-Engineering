@@ -1,28 +1,89 @@
 import streamlit as st
-from llm import ask_llm
-from prompt_templates import build_prompt
+def build_prompt(technique, task):
+
+    if technique == "Zero-shot":
+        return f"""
+Answer this React task directly.
+
+Task:
+{task}
+""".strip()
+
+    elif technique == "One-shot":
+        return f"""
+Example:
+Task: Create a React greeting component.
+Answer: Create a functional React component using JSX.
+
+Now answer this task:
+{task}
+""".strip()
+
+    elif technique == "Few-shot":
+        return f"""
+Example 1:
+Task: Display a username.
+Answer: Use JSX to display the username.
+
+Example 2:
+Task: Create a counter.
+Answer: Use React useState.
+
+Now answer this task:
+{task}
+""".strip()
+
+    elif technique == "CoT":
+        return f"""
+Understand the React task, identify the required components,
+and provide the solution with a short explanation.
+
+Task:
+{task}
+""".strip()
+
+    elif technique == "Manual CoT":
+        return f"""
+Step 1: Understand the task.
+Step 2: Identify the components.
+Step 3: Identify required React features.
+Step 4: Write the code.
+Step 5: Verify the solution.
+
+Task:
+{task}
+""".strip()
+
+    elif technique == "ToT":
+        return f"""
+Approach A: Suggest one React solution.
+
+Approach B: Suggest another React solution.
+
+Selection: Choose the most suitable solution.
+
+Task:
+{task}
+""".strip()
+
 
 st.set_page_config(
-    page_title="PromptLab AI",
-    page_icon="🤖",
-    layout="wide"
+    page_title="PromptLab",
+    page_icon="🤖"
 )
 
-st.title("🤖 PromptLab AI")
-st.subheader("LLM Prompt Engineering Playground")
+st.title("🤖 PromptLab")
+
+st.subheader("LLM Prompt Template Explorer")
 
 st.write(
-    "Explore prompting techniques and generate answers "
-    "to questions on different topics."
+    "A prompt engineering application for technical React tasks."
 )
 
-st.info("Connected to Groq API. No Hugging Face token required.")
-
-# Sidebar settings
-st.sidebar.header("⚙️ Model Settings")
+st.sidebar.header("Prompt Settings")
 
 technique = st.sidebar.selectbox(
-    "Select Prompting Technique",
+    "Choose Prompting Technique",
     [
         "Zero-shot",
         "One-shot",
@@ -35,62 +96,74 @@ technique = st.sidebar.selectbox(
 
 temperature = st.sidebar.slider(
     "Temperature",
-    min_value=0.0,
-    max_value=1.0,
-    value=0.3,
-    step=0.1
+    0.0,
+    1.0,
+    0.3,
+    0.1
 )
 
-max_tokens = st.sidebar.slider(
-    "Max Tokens",
-    min_value=100,
-    max_value=2000,
-    value=600,
-    step=100
-)
-
-# User task
-st.header("📝 Enter Your Task")
+st.markdown("### Enter Your React Task")
 
 task = st.text_area(
-    "Type any question or task",
-    placeholder=(
-        "Examples:\n"
-        "What is Python?\n"
-        "Explain DBMS with an example.\n"
-        "Write a Java program to add two numbers."
-    ),
+    "React Task",
+    placeholder="Create a React component that displays three student names in a list.",
     height=150
 )
 
-if st.button("🚀 Generate Answer", type="primary"):
-    if not task.strip():
-        st.warning("Please enter a question or task.")
+if st.button("🚀 Generate Answer"):
+
+    if task.strip():
+
+        prompt = build_prompt(
+            technique,
+            task
+        )
+
+        st.markdown("### 🔍 Generated Prompt")
+
+        st.code(
+            prompt,
+            language="text"
+        )
+
+        st.markdown("### 💡 Generated Answer")
+
+        react_code = '''import React from "react";
+
+function StudentList() {
+    const students = ["Arun", "Priya", "Rahul"];
+
+    return (
+        <div>
+            <h2>Student List</h2>
+
+            <ul>
+                {students.map((student, index) => (
+                    <li key={index}>{student}</li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+export default StudentList;'''
+
+        st.code(
+            react_code,
+            language="javascript"
+        )
+
+        st.write(
+            "This React component stores three student names "
+            "in an array and uses map() to display them as a list."
+        )
+
     else:
-        try:
-            with st.spinner("Generating answer using Groq..."):
-                generated_prompt = build_prompt(
-                    technique,
-                    task.strip()
-                )
 
-                answer = ask_llm(
-                    generated_prompt,
-                    temperature=temperature,
-                    max_tokens=max_tokens
-                )
-
-            st.success("Answer generated successfully!")
-
-            st.subheader("🔍 Generated Prompt")
-            st.code(generated_prompt, language="text")
-
-            st.subheader("💡 LLM Response")
-            st.markdown(answer)
-
-        except Exception as e:
-            st.error("The LLM could not generate a response.")
-            st.code(str(e), language="text")
+        st.warning("Please enter a task.")
 
 st.divider()
-st.caption("PromptLab AI | Prompt Engineering Project")
+
+st.caption(
+    "PromptLab | Prompt Engineering | Streamlit"
+)
