@@ -1,78 +1,71 @@
 def build_prompt(technique, task):
-    instruction = """
-You are a helpful AI assistant.
-Answer the user's actual question directly.
-Do not assume the task is about React unless requested.
-If code is requested, provide working code and a brief explanation.
+    base = f"""
+You are a helpful, knowledgeable AI assistant.
+
+Answer the user's actual request, whatever the topic.
+Understand the question before answering.
+Use simple language and provide accurate, relevant information.
+If the user requests code, provide complete code in the
+requested programming language with a brief explanation.
+If the user asks for a definition, explain it clearly.
+If the user asks for steps, provide them in order.
+Do not assume every question is about Python or React.
+
+User's request:
+{task}
 """
 
     if technique == "Zero-shot":
-        return f"""
-{instruction}
-
-Task: {task}
-"""
+        return base
 
     elif technique == "One-shot":
         return f"""
-{instruction}
+{base}
 
-Example:
-Question: What is HTML?
-Answer: HTML is the markup language used to structure web pages.
-
-Now answer:
-{task}
+Example format:
+Question: What is a database?
+Answer: A database is an organized collection of data.
+Follow this example's clear and simple style.
 """
 
     elif technique == "Few-shot":
         return f"""
-{instruction}
+{base}
 
-Examples:
-Question: What is Python?
-Answer: Python is a programming language known for its simple syntax.
-
-Question: What is SQL?
-Answer: SQL is used to manage and query relational databases.
-
-Now answer this question:
-{task}
+Follow these examples of answering different requests:
+- Definition questions: give a clear definition and example.
+- Programming questions: provide code and explain it.
+- How-to questions: give numbered steps.
+Choose the format that best matches the user's request.
 """
 
     elif technique == "CoT":
         return f"""
-{instruction}
+{base}
 
-Solve the task carefully. Provide a concise explanation
-of the key steps without revealing hidden reasoning.
-
-Task: {task}
+Work through the problem carefully. Provide the final answer
+and a concise explanation of the key steps, without revealing
+hidden internal reasoning.
 """
 
     elif technique == "Manual CoT":
         return f"""
-{instruction}
+{base}
 
-Use this structure where appropriate:
-1. Understand the question.
-2. Identify the important points.
-3. Formulate the answer.
-4. Present the final answer clearly.
-
-Task: {task}
+Use these steps when appropriate:
+1. Understand the request.
+2. Identify the important requirements.
+3. Prepare the answer.
+4. Present the result clearly.
 """
 
     elif technique == "ToT":
         return f"""
-{instruction}
+{base}
 
-Consider different possible approaches when useful.
-Choose the most suitable approach and give the final answer.
-Do not include unnecessary alternatives.
-
-Task: {task}
+Consider different approaches when the task benefits from it.
+Choose the most suitable approach and present the final answer.
+Avoid unnecessary alternatives.
 """
 
-    else:
-        raise ValueError("Unknown prompting technique")
+    return base
