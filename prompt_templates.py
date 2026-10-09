@@ -1,122 +1,78 @@
 def build_prompt(technique, task):
+    instruction = """
+You are a helpful AI assistant.
+Answer the user's actual question directly.
+Do not assume the task is about React unless requested.
+If code is requested, provide working code and a brief explanation.
+"""
 
     if technique == "Zero-shot":
         return f"""
-Answer this React task directly and accurately.
+{instruction}
 
-Task:
-{task}
-
-Provide:
-1. A short explanation
-2. Complete React code
-3. Brief explanation of the code
-""".strip()
-
+Task: {task}
+"""
 
     elif technique == "One-shot":
         return f"""
-Use the example below to understand the expected style.
+{instruction}
 
 Example:
-Task: Create a React greeting component.
-Answer: Create a functional React component using JSX
-to display "Hello, Student!".
+Question: What is HTML?
+Answer: HTML is the markup language used to structure web pages.
 
-Now answer this task:
+Now answer:
 {task}
-
-Provide:
-1. A short explanation
-2. Complete React code
-3. Brief explanation of the code
-""".strip()
-
+"""
 
     elif technique == "Few-shot":
         return f"""
-Study the examples and follow their style.
+{instruction}
 
-Example 1:
-Task: Display a username.
-Answer: Use JSX to display the username.
+Examples:
+Question: What is Python?
+Answer: Python is a programming language known for its simple syntax.
 
-Example 2:
-Task: Create a counter.
-Answer: Use React useState to store and update the counter.
+Question: What is SQL?
+Answer: SQL is used to manage and query relational databases.
 
-Example 3:
-Task: Handle a button click.
-Answer: Use an onClick event handler.
-
-Now answer this task:
+Now answer this question:
 {task}
-
-Provide complete React code and a short explanation.
-""".strip()
-
+"""
 
     elif technique == "CoT":
         return f"""
-Solve the following React task carefully.
+{instruction}
 
-First identify the requirements.
-Then identify the required React components and features.
-Finally provide the solution.
+Solve the task carefully. Provide a concise explanation
+of the key steps without revealing hidden reasoning.
 
-Do not reveal private/internal chain-of-thought.
-Provide only a short explanation of the key steps.
-
-Task:
-{task}
-""".strip()
-
+Task: {task}
+"""
 
     elif technique == "Manual CoT":
         return f"""
-Use the following explicit structure.
+{instruction}
 
-Step 1: Understand the task.
+Use this structure where appropriate:
+1. Understand the question.
+2. Identify the important points.
+3. Formulate the answer.
+4. Present the final answer clearly.
 
-Step 2: Identify the React components.
-
-Step 3: Identify required state, props, events, or hooks.
-
-Step 4: Write the complete React code.
-
-Step 5: Verify the solution.
-
-Task:
-{task}
-""".strip()
-
+Task: {task}
+"""
 
     elif technique == "ToT":
         return f"""
-Solve the React task using multiple approaches.
+{instruction}
 
-Approach A:
-Suggest one possible React solution.
+Consider different possible approaches when useful.
+Choose the most suitable approach and give the final answer.
+Do not include unnecessary alternatives.
 
-Approach B:
-Suggest another React solution.
-
-Approach C:
-Suggest another solution when useful.
-
-Selection:
-Compare the approaches and select the most suitable one.
-
-Final answer:
-Provide the selected solution with complete React code
-and a concise explanation.
-
-Do not reveal private/internal chain-of-thought.
-
-Task:
-{task}
-""".strip()
-
+Task: {task}
+"""
 
     else:
         raise ValueError("Unknown prompting technique")
