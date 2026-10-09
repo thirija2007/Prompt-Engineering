@@ -3,21 +3,23 @@ from llm import ask_llm
 from prompt_templates import build_prompt
 
 st.set_page_config(
-    page_title="PromptLab",
+    page_title="PromptLab AI",
     page_icon="🤖",
     layout="wide"
 )
 
-st.title("🤖 PromptLab")
-st.subheader("LLM Prompt Template Explorer")
+st.title("🤖 PromptLab AI")
+st.subheader("LLM Prompt Engineering Playground")
 
 st.write(
     "Explore prompting techniques and generate answers "
-    "to your questions using a Large Language Model."
+    "to questions on different topics."
 )
 
-# Prompt Settings
-st.sidebar.header("Prompt Settings")
+st.info("Connected to Groq API. No Hugging Face token required.")
+
+# Sidebar settings
+st.sidebar.header("⚙️ Model Settings")
 
 technique = st.sidebar.selectbox(
     "Select Prompting Technique",
@@ -43,47 +45,52 @@ max_tokens = st.sidebar.slider(
     "Max Tokens",
     min_value=100,
     max_value=2000,
-    value=500,
+    value=600,
     step=100
 )
 
-# User Input
-st.markdown("### Enter Your Task")
+# User task
+st.header("📝 Enter Your Task")
 
 task = st.text_area(
-    "Your Question",
-    placeholder="Example: What is Python?",
-    height=120
+    "Type any question or task",
+    placeholder=(
+        "Examples:\n"
+        "What is Python?\n"
+        "Explain DBMS with an example.\n"
+        "Write a Java program to add two numbers."
+    ),
+    height=150
 )
 
-if st.button("🚀 Generate Answer"):
-
+if st.button("🚀 Generate Answer", type="primary"):
     if not task.strip():
-        st.warning("Please enter your question.")
-
+        st.warning("Please enter a question or task.")
     else:
-        prompt = build_prompt(technique, task)
-
-        st.markdown("### 🔍 Generated Prompt")
-        st.code(prompt, language="text")
-
         try:
-            with st.spinner("Generating answer..."):
+            with st.spinner("Generating answer using Groq..."):
+                generated_prompt = build_prompt(
+                    technique,
+                    task.strip()
+                )
+
                 answer = ask_llm(
-                    prompt,
+                    generated_prompt,
                     temperature=temperature,
                     max_tokens=max_tokens
                 )
 
-            st.markdown("### 💡 LLM Response")
-            st.write(answer)
+            st.success("Answer generated successfully!")
 
-        except Exception as error:
-            st.error(
-                "The LLM could not generate a response. "
-                "Please check your Hugging Face token and model."
-            )
-            st.caption(str(error))
+            st.subheader("🔍 Generated Prompt")
+            st.code(generated_prompt, language="text")
+
+            st.subheader("💡 LLM Response")
+            st.markdown(answer)
+
+        except Exception as e:
+            st.error("The LLM could not generate a response.")
+            st.code(str(e), language="text")
 
 st.divider()
-st.caption("PromptLab | Prompt Engineering | Streamlit + Qwen")
+st.caption("PromptLab AI | Prompt Engineering Project")
